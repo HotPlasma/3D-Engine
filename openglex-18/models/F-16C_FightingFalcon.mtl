@@ -1,0 +1,37 @@
+newmtl glass
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.12 0.12 0.12
+Tf 1.00 1.00 1.00
+map_Kd Glass_Cockpit.png
+Ni 1.00
+Ks 0.75 0.75 0.75
+Ns 8.00
+newmtl pilot
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.12 0.12 0.12
+Tf 1.00 1.00 1.00
+map_Kd Pilot_usa.png
+Ni 1.00
+Ks 0.75 0.75 0.75
+Ns 8.00
+newmtl plane
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.12 0.12 0.12
+Tf 1.00 1.00 1.00
+map_Kd F-16C_FightingFalcon_P01.png
+bump F-16C_FightingFalcon_N.png -bm 0
+Ni 1.00
+Ks 0.75 0.75 0.75
+Ns 8.00
+newmtl seat
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.12 0.12 0.12
+Tf 1.00 1.00 1.00
+map_Kd Eject_Seat.png
+Ni 1.00
+Ks 0.75 0.75 0.75
+Ns 8.00
