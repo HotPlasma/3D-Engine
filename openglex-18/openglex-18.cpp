@@ -52,7 +52,7 @@ GLfloat m_lightPosition[] = {-50.0f, +50.0f, +100.0f, 1.0f};
 //char textureData1[256*256*3];
 //char textureData2[256*256*3];
 // array of OpenGL texture objects 
-GLuint m_textureID[6];
+GLuint m_textureID[7];
 
 GLfloat m_xRotationAngle = 45.0f;
 GLfloat m_xAngleIncrement = 0.4f;
@@ -152,6 +152,8 @@ int main()
 	Model LearJet("models\\learjet.obj", sf::Vector3f(100, 0, 30), "images\\learjet.bmp");
 	Model SkyBox("models\\SkyBox.obj",sf::Vector3f(0,0,0), "images\\SkyBox.bmp");
 	Model RunWay("models\\RunWay.obj",sf::Vector3f(0,0,0), "images\\RunWay.bmp");
+	Model Hanger("models\\Hanger.obj", sf::Vector3f(0, 0, 0), "images\\Hanger.bmp");
+	Model Hanger2("models\\Hanger.obj", sf::Vector3f(0, 0, 0), "images\\Hanger2.bmp");
 
 	// SFML-2.3.2 depth buffering fails unless we create a more specific window - as below
 	int depthBits = 24;
@@ -194,6 +196,8 @@ int main()
 	tl->LoadBMP(ControlTower.GetTextureLocation(), m_textureID[3]);
 	tl->LoadBMP(LearJet.GetTextureLocation(), m_textureID[4]);
 	tl->LoadBMP(RunWay.GetTextureLocation(), m_textureID[5]);
+	tl->LoadBMP(Hanger.GetTextureLocation(), m_textureID[6]);
+	tl->LoadBMP(Hanger2.GetTextureLocation(), m_textureID[7]);
 	
 
 	// TODO
@@ -209,6 +213,8 @@ int main()
 	ControlTower.LoadModel(m_textureID[3], ControlTower.GetFileLocation());
 	LearJet.LoadModel(m_textureID[4], LearJet.GetFileLocation());
 	RunWay.LoadModel(m_textureID[5], RunWay.GetFileLocation());
+	Hanger.LoadModel(m_textureID[6], Hanger.GetFileLocation());
+	Hanger2.LoadModel(m_textureID[7], Hanger.GetFileLocation());
 
     // Start game loop
     while (window.isOpen())
@@ -282,7 +288,12 @@ int main()
 			glPopMatrix();
 
 			glPushMatrix();
-			glTranslatef(5, 0, 25);
+			glTranslatef(5, 0, 35);
+			Jet.DrawModel(true, true);
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(-30, 0, 35);
 			Jet.DrawModel(true, true);
 			glPopMatrix();
 
@@ -310,6 +321,17 @@ int main()
 			glPushMatrix();
 			glTranslatef(50, 0.1, -20);
 			RunWay.DrawModel(true, true);
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(5, 0, 35);
+			Hanger.DrawModel(true, true);
+			glPopMatrix();
+
+
+			glPushMatrix();
+			glTranslatef(-30, 0, 35);
+			Hanger2.DrawModel(true, true);
 			glPopMatrix();
 
 			clock.restart();
