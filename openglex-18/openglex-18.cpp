@@ -8,6 +8,7 @@
 #include "ModelReader.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Scene.h"
 
 #if 0
 
@@ -64,7 +65,7 @@ GLfloat m_yAngleIncrement = 0.5f;
 
 void SetMaterialWhite()
 {
-	GLfloat materialWhiteAmbient[] = {0.2f, 0.2f, 0.2f, 1.0f};
+	GLfloat materialWhiteAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};
 	GLfloat materialWhiteDiffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
 	GLfloat materialWhiteSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};		// so keeps light colour
 	GLfloat materialWhiteShininess = 700.0f;
@@ -143,18 +144,6 @@ int main()
 	// Create the camera
 	Camera FirstPersonView;
 
-	// Create the models
-	Model Plane("models\\Plane.obj", sf::Vector3f(0, 0, 0), "images\\floor.bmp");
-	/*Model Pyramid("models\\Pyramid.obj", sf::Vector3f(0, 0, 0), "images\\UVLesson.bmp");*/
-	Model Jet("models\\F-16C_FightingFalcon.obj", sf::Vector3f(5, 0, 5), "images\\Jet.bmp");
-	//Model AirBus("models\\AirBus.obj", sf::Vector3f(0, 0, 100), "images\\plane.bmp");
-	Model ControlTower("models\\ControlTower.obj", sf::Vector3f(50, 0, 0), "images\\Tower.bmp");
-	Model LearJet("models\\learjet.obj", sf::Vector3f(100, 0, 30), "images\\learjet.bmp");
-	Model SkyBox("models\\SkyBox.obj",sf::Vector3f(0,0,0), "images\\SkyBox.bmp");
-	Model RunWay("models\\RunWay.obj",sf::Vector3f(0,0,0), "images\\RunWay.bmp");
-	Model Hanger("models\\Hanger.obj", sf::Vector3f(0, 0, 0), "images\\Hanger.bmp");
-	Model Hanger2("models\\Hanger.obj", sf::Vector3f(0, 0, 0), "images\\Hanger2.bmp");
-
 	// SFML-2.3.2 depth buffering fails unless we create a more specific window - as below
 	int depthBits = 24;
 	int stencilBits = 8;
@@ -189,15 +178,8 @@ int main()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(60.f, (float)SCREEN_WIDTH/SCREEN_HEIGHT, 1.f, 500.f);
-	TextureLoader* tl = new TextureLoader();
-	tl->LoadBMP(Plane.GetTextureLocation(), m_textureID[0]);
-	tl->LoadBMP(Jet.GetTextureLocation(), m_textureID[1]);
-	tl->LoadBMP(SkyBox.GetTextureLocation(), m_textureID[2]);
-	tl->LoadBMP(ControlTower.GetTextureLocation(), m_textureID[3]);
-	tl->LoadBMP(LearJet.GetTextureLocation(), m_textureID[4]);
-	tl->LoadBMP(RunWay.GetTextureLocation(), m_textureID[5]);
-	tl->LoadBMP(Hanger.GetTextureLocation(), m_textureID[6]);
-	tl->LoadBMP(Hanger2.GetTextureLocation(), m_textureID[7]);
+
+	Scene AirPort("scenes\\Airport Scene.txt");
 	
 
 	// TODO
@@ -206,15 +188,6 @@ int main()
 
 	// load in the model here from the models subdirectory
 	//m_modelReader.push_back(new ModelReader(Cube.GetFileLocation()));
-
-	Plane.LoadModel(m_textureID[0], Plane.GetFileLocation());
-	Jet.LoadModel(m_textureID[1], Jet.GetFileLocation());
-	SkyBox.LoadModel(m_textureID[2], SkyBox.GetFileLocation());
-	ControlTower.LoadModel(m_textureID[3], ControlTower.GetFileLocation());
-	LearJet.LoadModel(m_textureID[4], LearJet.GetFileLocation());
-	RunWay.LoadModel(m_textureID[5], RunWay.GetFileLocation());
-	Hanger.LoadModel(m_textureID[6], Hanger.GetFileLocation());
-	Hanger2.LoadModel(m_textureID[7], Hanger.GetFileLocation());
 
     // Start game loop
     while (window.isOpen())
@@ -250,8 +223,6 @@ int main()
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 
-			//SetLightPosition(-10000,5000,10000);
-
 			HWND handle = window.getSystemHandle();
 
 			
@@ -273,66 +244,24 @@ int main()
 
 			}
 
-			SetLightPosition(100,100,100);
+			SetLightPosition(100,100, -100);
 
-			glPushMatrix();
-
-			SetMaterialWhite();
 
 			// try SetMaterialRedShiny(); here tosee the effect
 
 			// call the rendering code
 
-			Plane.DrawModel(true, true);
-			// restore untranslated matrix from matrix stack
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(5, 0, 35);
-			Jet.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(-30, 0, 35);
-			Jet.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(0, 0, 0);
-			SetMaterialNoDiffuse();
-			SkyBox.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(50, 0, 0);
-			ControlTower.DrawModel(true, true);
-			glPopMatrix();
-			
-			glPushMatrix();
-			glTranslatef(10, 0, 0);
-			LearJet.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(25, 0, 0);
-			LearJet.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(50, 0.1, -20);
-			RunWay.DrawModel(true, true);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslatef(5, 0, 35);
-			Hanger.DrawModel(true, true);
-			glPopMatrix();
-
-
-			glPushMatrix();
-			glTranslatef(-30, 0, 35);
-			Hanger2.DrawModel(true, true);
-			glPopMatrix();
+			for (int i = 0; i < AirPort.ModelList.size(); i++)
+			{
+				glPushMatrix();
+					SetMaterialWhite();
+					if( i==6 )
+					{
+						SetMaterialNoDiffuse();
+					}
+					AirPort.ModelList[i].DrawModel(true,true);
+				glPopMatrix();
+			}
 
 			clock.restart();
 		    // Finally, display rendered frame on screen

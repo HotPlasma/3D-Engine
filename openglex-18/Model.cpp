@@ -1,11 +1,16 @@
 #include "stdafx.h"
 #include "Model.h"
 
-Model::Model(string FileLocation, sf::Vector3f Position, string TextureLocation)
+Model::Model()
+{
+
+}
+
+Model::Model(string FileLocation, string TextureLocation, sf::Vector3f Position, sf::Vector3f Rotation, sf::Vector3f Scale)
 {
 	sFileName = FileLocation;
-	ModelPosition = Position;
 	sTexture = TextureLocation;
+	ModelPosition = Position;
 }
 
 string Model::GetFileLocation()
@@ -13,36 +18,72 @@ string Model::GetFileLocation()
 	return sFileName;
 }
 
+GLuint Model::GetTextureLocation()
+{
+	return m_textureID;
+}
+
 sf::Vector3f Model::GetPosition()
 {
 	return ModelPosition;
 }
-string Model::GetTextureLocation()
+
+sf::Vector3f Model::GetRotation()
 {
-	return sTexture;
+	return ModelRotation;
 }
 
-void Model::SetFileLocation(string Location)
+sf::Vector3f Model::GetScale()
 {
-	sFileName = Location;
-}
-void  Model::SetPosition(sf::Vector3f Position)
-{
-	ModelPosition = Position;
-}
-void  Model::SetTextureLocation(string Location)
-{
-	sTexture = Location;
+	return ModelScale;
 }
 
-void Model::LoadModel(GLuint newTexture, string Model)
+
+void Model::SetFileLocation(string NewLocation)
 {
-	m_textureID = newTexture;
+	sFileName = NewLocation;
+}
+
+void  Model::SetTextureLocation(string NewLocation)
+{
+	sTexture = NewLocation;
+}
+
+void  Model::SetPosition(sf::Vector3f NewPosition)
+{
+	ModelPosition = NewPosition;
+}
+
+void  Model::SetRotation(sf::Vector3f NewRotation)
+{
+	ModelRotation = NewRotation;
+}
+
+void  Model::SetScale(sf::Vector3f NewScale)
+{
+	ModelScale = NewScale;
+}
+
+void Model::SetTexture(GLuint TextureID)
+{
+	m_textureID = TextureID;
+}
+
+void Model::LoadModel(string Model)
+{
 	m_modelReader = new ModelReader(Model);
 }
 
 void Model::DrawModel(bool drawWithNormals, bool drawWithTexture)
 {
+	glRotatef(ModelRotation.x, 1, 0, 0);
+	glRotatef(ModelRotation.y, 0, 1, 0);
+	glRotatef(ModelRotation.z, 0, 0, 1);
+
+	glScalef(ModelScale.x,ModelScale.y,ModelScale.z);
+
+	glTranslatef(ModelPosition.x, ModelPosition.y, ModelPosition.z);
+
 	// activate and specify pointer to vertex array
 
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -77,7 +118,7 @@ void Model::DrawModel(bool drawWithNormals, bool drawWithTexture)
 	// TODO
 	glDrawArrays(GL_TRIANGLES, 0, (unsigned int)vertices.size() / 3);
 	// deactivate vertex arrays after drawing
-
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	if (drawWithNormals)
 	{

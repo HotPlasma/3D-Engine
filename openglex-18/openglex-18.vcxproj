@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="scenes\Airport Scene.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

@@ -74,6 +74,15 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 	
 	unsigned int numberOfPixels = imageSize / 3;
 
+	if (imageSize == 0)
+
+	{
+
+	   numberOfPixels = bmpInfo->biWidth * bmpInfo->biHeight;
+
+	   imageSize = numberOfPixels * 3;
+
+	}
 	
 	// First allocate pixel memory
 	pixels = new unsigned char[imageSize];

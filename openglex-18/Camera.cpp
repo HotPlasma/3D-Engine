@@ -3,7 +3,7 @@
 
 Camera::Camera()
 {
-	CameraPos = sf::Vector3f(1.0f, 1.0f, 1.0);
+	CameraPos = sf::Vector3f(-1.0f, 1.0f, 1.0);
 	CameraView = sf::Vector3f(0.0f, 1.0f, 0.0f);
 }
 
@@ -19,6 +19,8 @@ sf::Vector3f Camera::GetCameraView()
 
 void Camera::ProcessUserInput(float yAngle, float zAngle)
 {
+
+//	std::cout << CameraPos.x << " " << CameraPos.y << " " << CameraPos.z << " " << CameraView.x << " " << CameraView.y << " " << CameraView.z << std::endl;
 		//sf::Vector2f fMousePos = (sf::Vector2f)MousePos / 1000.0f;
 		sf::Vector3f ViewVec = CameraView - CameraPos;
 	
@@ -28,7 +30,6 @@ void Camera::ProcessUserInput(float yAngle, float zAngle)
 		CameraView.z = CameraPos.z + (float)sinf(-yAngle) * ViewVec.x + cosf(-yAngle) * ViewVec.z;
 	
 		float fraction = 0.1f;
-	
 	
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 		{
