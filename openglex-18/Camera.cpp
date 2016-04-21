@@ -3,6 +3,7 @@
 
 Camera::Camera()
 {
+	// Sets Pos and View to default values
 	CameraPos = sf::Vector3f(-1.0f, 1.0f, 1.0);
 	CameraView = sf::Vector3f(0.0f, 1.0f, 0.0f);
 }
@@ -17,20 +18,18 @@ sf::Vector3f Camera::GetCameraView()
 	return CameraView;
 }
 
-void Camera::ProcessUserInput(float yAngle, float zAngle)
+void Camera::ProcessUserInput(float yAngle, float zAngle) 
 {
-
-//	std::cout << CameraPos.x << " " << CameraPos.y << " " << CameraPos.z << " " << CameraView.x << " " << CameraView.y << " " << CameraView.z << std::endl;
-		//sf::Vector2f fMousePos = (sf::Vector2f)MousePos / 1000.0f;
 		sf::Vector3f ViewVec = CameraView - CameraPos;
 	
+		// Allows looking around with the mouse
 		CameraView.x = CameraPos.x + (float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z;
-		//cout <<  ViewVec.x << " " << ViewVec.z << endl;
-		CameraView.y += zAngle * 2.0f;
+		CameraView.y += zAngle * 2.0f; // Allows looking up/down in the y axis
 		CameraView.z = CameraPos.z + (float)sinf(-yAngle) * ViewVec.x + cosf(-yAngle) * ViewVec.z;
 	
-		float fraction = 0.1f;
+		float fraction = 0.1f; // Fraction which limits movement speed
 	
+		// Forwards movement
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 		{
 			CameraPos.x += ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z) * fraction;
@@ -38,7 +37,7 @@ void Camera::ProcessUserInput(float yAngle, float zAngle)
 			CameraView.x += ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z) * fraction;
 			CameraView.z += ((float)sinf(-yAngle) * ViewVec.x + cosf(-yAngle) * ViewVec.z) * fraction;
 		}
-	
+		// Backwards movement
 		 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 		{
 			 CameraPos.x -= ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z) * fraction;
@@ -47,6 +46,7 @@ void Camera::ProcessUserInput(float yAngle, float zAngle)
 			 CameraView.z -= ((float)sinf(-yAngle) * ViewVec.x + cosf(-yAngle) * ViewVec.z) * fraction;
 		}
 	
+		 // Strafing right movement
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 		{
 			CameraPos.z += ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z) * fraction;
@@ -54,6 +54,8 @@ void Camera::ProcessUserInput(float yAngle, float zAngle)
 			CameraView.z += ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z)* fraction;
 			CameraView.x -= ((float)sinf(-yAngle) * ViewVec.x + cosf(-yAngle) * ViewVec.z) * fraction;
 		}
+
+		// Strafing left movement
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 		{
 			CameraPos.z -= ((float)cosf(-yAngle) * ViewVec.x - sinf(-yAngle) * ViewVec.z) * fraction;

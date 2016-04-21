@@ -6,11 +6,15 @@ Model::Model()
 
 }
 
-Model::Model(string FileLocation, string TextureLocation, sf::Vector3f Position, sf::Vector3f Rotation, sf::Vector3f Scale)
+Model::Model(string FileLocation, string TextureLocation, sf::Vector3f Position, sf::Vector3f Rotation, sf::Vector3f Scale, int MaterialID)
 {
+	// Constucts a model with the given variables
 	sFileName = FileLocation;
 	sTexture = TextureLocation;
 	ModelPosition = Position;
+	ModelRotation = Rotation;
+	ModelScale = Scale;
+	ModelMaterial = MaterialID;
 }
 
 string Model::GetFileLocation()
@@ -37,6 +41,12 @@ sf::Vector3f Model::GetScale()
 {
 	return ModelScale;
 }
+
+int Model::GetMaterial()
+{
+	return ModelMaterial;
+}
+
 
 
 void Model::SetFileLocation(string NewLocation)
@@ -69,6 +79,11 @@ void Model::SetTexture(GLuint TextureID)
 	m_textureID = TextureID;
 }
 
+void Model::SetMaterial(int Material)
+{
+	ModelMaterial = Material;
+}
+
 void Model::LoadModel(string Model)
 {
 	m_modelReader = new ModelReader(Model);
@@ -76,12 +91,15 @@ void Model::LoadModel(string Model)
 
 void Model::DrawModel(bool drawWithNormals, bool drawWithTexture)
 {
+	// Performs rotation of model
 	glRotatef(ModelRotation.x, 1, 0, 0);
 	glRotatef(ModelRotation.y, 0, 1, 0);
 	glRotatef(ModelRotation.z, 0, 0, 1);
 
+	// Scales model if necessary 
 	glScalef(ModelScale.x,ModelScale.y,ModelScale.z);
 
+	// Translates model 
 	glTranslatef(ModelPosition.x, ModelPosition.y, ModelPosition.z);
 
 	// activate and specify pointer to vertex array
@@ -115,7 +133,6 @@ void Model::DrawModel(bool drawWithNormals, bool drawWithTexture)
 
 
 	// draw the shape...
-	// TODO
 	glDrawArrays(GL_TRIANGLES, 0, (unsigned int)vertices.size() / 3);
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);

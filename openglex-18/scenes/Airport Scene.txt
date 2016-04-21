@@ -1,10 +1,10 @@
-M Plane       | O models/Plane.obj                | T images/floor.bmp   | Tr 0 0 0      | R 0 0 0    | S 1 1 1 E
-M Jet         | O models/F-16C_FightingFalcon.obj | T images/Jet.bmp     | Tr 5 0 35     | R 0 0 0    | S 1 1 1 E
-M Jet2        | O models/F-16C_FightingFalcon.obj | T images/Jet.bmp     | Tr -30 0 35   | R 0 0 0    | S 1 1 1 E
-M ControlTower| O models/Tower.obj                | T images/Tower.bmp   | Tr 50 0 0     | R 0 0 0    | S 1 1 1 E
-M LearJet     | O models/learjet.obj		      | T images/learjet.bmp | Tr 10 0 0     | R 0 0 0    | S 1 1 1 E
-M LearJet2    | O models/learjet.obj		      | T images/learjet.bmp | Tr 25 0 0     | R 0 0 0    | S 1 1 1 E
-M SkyBox      | O models/SkyBox.obj		          | T images/SkyBox.bmp  | Tr 0 0 0      | R 0 90 0   | S 1 1 1 E
-M RunWay      | O models/RunWay.obj               | T images/RunWay.bmp  | Tr 50 0.1 -20 | R 0 0 0    | S 1 1 1 E
-M Hanger      | O models/Hanger.obj		          | T images/Hanger.bmp  | Tr 5 0 35     | R 0 0 0    | S 1 1 1 E
-M Hanger2     | O models/Hanger.obj               | T images/Hanger2.bmp | Tr -30 0 35   | R 0 0 0    | S 1 1 1 E
+N Plane       | O models/Plane.obj                | T images/floor.bmp   | Tr 0 0 0      | R 0 0 0    | S 1 1 1 | M 1 E
+N Jet         | O models/F-16C_FightingFalcon.obj | T images/Jet.bmp     | Tr 5 0 35     | R 0 0 0    | S 1 1 1 | M 1 E
+N Jet2        | O models/F-16C_FightingFalcon.obj | T images/Jet.bmp     | Tr -30 0 35   | R 0 0 0    | S 1 1 1 | M 1 E
+N ControlTower| O models/Tower.obj                | T images/Tower.bmp   | Tr 50 0 0     | R 0 0 0    | S 1 1 1 | M 1 E
+N LearJet     | O models/learjet.obj		      | T images/learjet.bmp | Tr 10 0 0     | R 0 0 0    | S 1 1 1 | M 1 E
+N LearJet2    | O models/learjet.obj		      | T images/learjet.bmp | Tr 25 0 0     | R 0 0 0    | S 1 1 1 | M 1 E
+N SkyBox      | O models/SkyBox.obj		          | T images/SkyBox.bmp  | Tr 0 0 0      | R 0 90 0   | S 1 1 1 | M 2 E
+N RunWay      | O models/RunWay.obj               | T images/RunWay.bmp  | Tr 50 0.1 -20 | R 0 0 0    | S 1 1 1 | M 1 E
+N Hanger      | O models/Hanger.obj		          | T images/Hanger.bmp  | Tr 5 0 35     | R 0 0 0    | S 1 1 1 | M 1 E
+N Hanger2     | O models/Hanger.obj               | T images/Hanger2.bmp | Tr -30 0 35   | R 0 0 0    | S 1 1 1 | M 1 E

@@ -14,6 +14,6 @@ public:
 
 
 
-	int LoadBMP(string location, GLuint &texture); 
+	int LoadBMP(string location, GLuint &texture, bool repeatTexture);
 };
 

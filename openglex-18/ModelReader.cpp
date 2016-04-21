@@ -43,7 +43,6 @@ void ModelReader::ReadModelObjData(string filename)
 		if (token == "#")
 		{
 			// ignore rest of line
-			// iss >> s;
 		}
 		else if (token == "g")
 		{
@@ -80,48 +79,48 @@ void ModelReader::ReadModelObjData(string filename)
 void ModelReader::ProcessVertexLine(istringstream& iss)
 {
 
-	// TODO - store 3 floats in m_vertices vector
+	// Get all 3 verticies
 	float fVertex;
 
 	for (int i = 0; i < 3; i++)
 	{
 		iss >> fVertex;
 
-		m_vertices.push_back(fVertex);
+		m_vertices.push_back(fVertex); // Push to vector of vertices
 	}
 
 }
 
 void ModelReader::ProcessVertexNormalLine(istringstream& iss)
 {
-	// TODO - store 3 floats in m_vertexNormals vector
+	// Get all vertices normals
 	float fVertexNormal;
 
 	for (int i = 0; i < 3; i++)
 	{
 		iss >> fVertexNormal;
 
-		m_vertexNormals.push_back(fVertexNormal);
+		m_vertexNormals.push_back(fVertexNormal); // Push to vertex normal's vector
 	}
 }
 
 void ModelReader::ProcessVertexTextureLine(istringstream& iss)
 {
-	// TODO - store 2 floats in m_vertexTextureCoordinates vector
+	// Get vertex texture lines
 	float fVertexTextureLine;
 
 	for (int i = 0; i < 2; i++)
 	{
 		iss >> fVertexTextureLine;
 
-		m_vertexTextureCoordinates.push_back(fVertexTextureLine);
+		m_vertexTextureCoordinates.push_back(fVertexTextureLine); // Push to vector of vertex texture lines
 	}
 }
 
 
 void ModelReader::ProcessFaceLine(istringstream& iss)
 {
-	// TODO - process 3 types of f line data
+	// Get all face lines
 	int iFaces;
 	static const int forwardSlash = 0x2F;
 
@@ -185,12 +184,9 @@ void ModelReader::CreateExpandedVertices()
 		
 		int a;
 		a = (*it) * 3;
-		// TODO - index and copy 3 floats to the m_vertexTriplets vector
+
 		for (int i = 0; i < 3; i++)
 		{
-			
-			//cout << a << endl;
-
 
 			float v = m_vertices[a + i];
 
@@ -215,8 +211,6 @@ void ModelReader::CreateExpandedNormals()
 
 		for (int i = 0; i < 3; i++)
 		{
-			
-			//cout << a << endl;
 
 			if ((a + i) >= (int)m_vertexNormals.size())
 			{
@@ -230,9 +224,6 @@ void ModelReader::CreateExpandedNormals()
 				m_vertexNormalTriplets.push_back(v);
 			}
 		}	
-
-
-		// TODO - index and copy 3 floats to the m_vertexNormalTriplets vector
 
 	}
 }
@@ -255,7 +246,6 @@ void ModelReader::CreateExpandedTextureCoordinates()
 			m_vertexTexturePairs.push_back(m_vertexTextureCoordinates[a + i]);
 		}
 	}
-	// TODO  - index and copy 2 floats to the m_vertexTexturePairs vector
 
 }
 

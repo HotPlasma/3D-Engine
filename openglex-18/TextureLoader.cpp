@@ -18,7 +18,7 @@ TextureLoader::~TextureLoader(void)
 //
 //
 // this loads and binds the texture to a given open gl identifier
-int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* location
+int TextureLoader::LoadBMP(string location, GLuint &texture, bool repeatTexture)  //const char* location
 {
 	// this is a version using c++ file i/o rather than c.
 	unsigned char* datBuff[2] = {nullptr, nullptr}; // Header buffers
@@ -122,12 +122,20 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, pixels);
 
 	// do we clamp the textures??
-#if 0
-	// -----------------------------------------------------------
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	//------------------------------------------------------------
-#endif
+	if (repeatTexture == false)
+	{
+		// -----------------------------------------------------------
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		//------------------------------------------------------------
+	}
+
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
 	// Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, NULL);
 

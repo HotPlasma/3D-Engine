@@ -12,18 +12,17 @@
 
 #if 0
 
-#define GL_GLEXT_PROTOTYPES 1		// ALLOW USE OF OPEN GL 1.5+ functionality!!!
+#define GL_GLEXT_PROTOTYPES 1		// ALLOW USE OF OPEN GL 1.5+ functionality
 #define GLEW_STATIC
-// this needs to be the first include
+
 #include <SFML\glew.h>		// make 1.5 functions into function pointers - bind at runtime.
-#include <SFML\OpenGL.hpp>	// glew BEFORE opengl headers!!!!
+#include <SFML\OpenGL.hpp>	
 #include <SFML\Graphics.hpp>
-// put these inside the SFML\include folder
+
 #include <SFML\wglext.h>
 #include <SFML\glext.h>
-// note weve also added the lib file glew32s.lib
 
-// shader.h included these
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -40,73 +39,41 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 1024;
 const float REFRESH_RATE = 0.03f;
 
-float angle = 0.0f;
 
 
-// we make the light position a global variable
-// (later would belong to a class handling lighting)
-
-// put light behind and above us on left
+// default light position
 GLfloat m_lightPosition[] = {-50.0f, +50.0f, +100.0f, 1.0f};
 
-// character buffers for the raw textures
-//char textureData1[256*256*3];
-//char textureData2[256*256*3];
-// array of OpenGL texture objects 
-GLuint m_textureID[7];
 
-GLfloat m_xRotationAngle = 45.0f;
-GLfloat m_xAngleIncrement = 0.4f;
-
-GLfloat m_yRotationAngle =  0.0f;
-GLfloat m_yAngleIncrement = 0.5f;
-
-//vector<ModelReader*> m_modelReader;
-
-void SetMaterialWhite()
+void SetMaterialDefault() // A default material for most models
 {
 	GLfloat materialWhiteAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};
 	GLfloat materialWhiteDiffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
 	GLfloat materialWhiteSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};		// so keeps light colour
 	GLfloat materialWhiteShininess = 700.0f;
 	glShadeModel(GL_SMOOTH);
-	//glShadeModel(GL_FLAT);
 	glMaterialfv(GL_FRONT,GL_AMBIENT, materialWhiteAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, materialWhiteDiffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, materialWhiteSpecular);
 	glMaterialf(GL_FRONT, GL_SHININESS, materialWhiteShininess);
 }
 
-void SetMaterialNoDiffuse()
+void SetMaterialNoDiffuse() // A material for models which should have no shadows e.g. skybox
 {
 	GLfloat materialWhiteAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	GLfloat materialWhiteDiffuse[] = {0.0f, 0.0f, 0.0f, 0.0f};
 	GLfloat materialWhiteSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};		// so keeps light colour
 	GLfloat materialWhiteShininess = 0.0f;
 	glShadeModel(GL_SMOOTH);
-	//glShadeModel(GL_FLAT);
 	glMaterialfv(GL_FRONT,GL_AMBIENT, materialWhiteAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, materialWhiteDiffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, materialWhiteSpecular);
 	glMaterialf(GL_FRONT, GL_SHININESS, materialWhiteShininess);
 }
 
-void SetMaterialRedShiny()
-{
-	GLfloat materialRedAmbient[] = {0.2f, 0.0f, 0.0f, 1.0f};
-	GLfloat materialRedDiffuse[] = {0.8f, 0.0f, 0.0f, 1.0f};
-	GLfloat materialRedSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	GLfloat materialRedShininess = 700.0f;						// try 500 for a sharper specular highlight
-	glShadeModel(GL_SMOOTH);
-	//glShadeModel(GL_FLAT);
-	glMaterialfv(GL_FRONT,GL_AMBIENT, materialRedAmbient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, materialRedDiffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, materialRedSpecular);
-	glMaterialf(GL_FRONT, GL_SHININESS, materialRedShininess);
-}
 
 
-void SetLightPosition(float x, float y, float z)
+void SetLightPosition(float x, float y, float z) // Sets light position to given values
 {
 	m_lightPosition[0] = x;
 	m_lightPosition[1] = y;
@@ -114,7 +81,7 @@ void SetLightPosition(float x, float y, float z)
 	glLightfv(GL_LIGHT0, GL_POSITION, m_lightPosition);
 }
 
-void ConfigureLightSources()
+void ConfigureLightSources() // Sets up openGL light
 {
 	GLfloat lightColour[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	GLfloat noLight[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -135,7 +102,7 @@ void ConfigureLightSources()
 
 	// with lighting glColor no longer applies
 	// create a default material for the models
-	SetMaterialWhite();
+	SetMaterialDefault();
 }
 
 
@@ -144,13 +111,18 @@ int main()
 	// Create the camera
 	Camera FirstPersonView;
 
-	// SFML-2.3.2 depth buffering fails unless we create a more specific window - as below
+	// Used for tilling textures
+	const int PLANESIZE = 2048;
+	const int TEXSCALE = 512;
+
+	// SFML-2.3.2 depth buffering fails unless a more specfic window is created - as below
 	int depthBits = 24;
 	int stencilBits = 8;
 	int antiAliasingLevel = 2;
 	int majorVersion = 3;
 	int minorVersion = 3;
 
+	// Create window
 	sf::ContextSettings context(depthBits, stencilBits, antiAliasingLevel, majorVersion, minorVersion)	;
 	sf::Window window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "SFML Window", 7U, context);
 
@@ -181,13 +153,9 @@ int main()
 
 	Scene AirPort("scenes\\Airport Scene.txt");
 	
-
-	// TODO
 	// enable this to setup the lighting after normals added
 	ConfigureLightSources();
 
-	// load in the model here from the models subdirectory
-	//m_modelReader.push_back(new ModelReader(Cube.GetFileLocation()));
 
     // Start game loop
     while (window.isOpen())
@@ -208,6 +176,7 @@ int main()
             if (Event.type == sf::Event::Resized)
                   glViewport(0, 0, Event.size.width, Event.size.height);
         }
+
         // Set the active window before using OpenGL commands
         // It's useless here because active window is always the same,
         // but don't forget it if you use multiple windows or controls
@@ -228,37 +197,57 @@ int main()
 			
 			if (GetFocus() == handle) // Allows alt-tabing out of screen
 			{
-				sf::Vector2i WindowOrigin(SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1);
-				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-				sf::Mouse::setPosition(WindowOrigin, window);
+				// Allows first person view changing with mouse movement
+				sf::Vector2i WindowOrigin(SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1); // Middle of the screen
+				sf::Vector2i mousePos = sf::Mouse::getPosition(window); // Get displacement of mouse
+				sf::Mouse::setPosition(WindowOrigin, window); // Reset mouse at origin
 
-				float yAngle = (WindowOrigin - mousePos).x / 1000.0f;
+				float yAngle = (WindowOrigin - mousePos).x / 1000.0f; 
 				float zAngle = (WindowOrigin - mousePos).y / 1000.0f;
 
-				FirstPersonView.ProcessUserInput(yAngle, zAngle);
+				FirstPersonView.ProcessUserInput(yAngle, zAngle); // Send mouse position data to be processed in order to move camera
 
+				// Set up camera as a gluLookAt function
 				gluLookAt(FirstPersonView.GetCameraPos().x, FirstPersonView.GetCameraPos().y, FirstPersonView.GetCameraPos().z, FirstPersonView.GetCameraView().x, FirstPersonView.GetCameraView().y, FirstPersonView.GetCameraView().z, 0, 1, 0);
 				
 
-				window.setMouseCursorVisible(false);
+				window.setMouseCursorVisible(false); // Mouse is invisible
 
 			}
 
-			SetLightPosition(100,100, -100);
-
-
-			// try SetMaterialRedShiny(); here tosee the effect
+			SetLightPosition(100,100, -100); // Sets light position every frame from a given angle
 
 			// call the rendering code
 
-			for (int i = 0; i < AirPort.ModelList.size(); i++)
+			// Tiling of a texture for the ground
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, AirPort.ModelList[0].GetTextureLocation()); // Ground/Plane model should be the first model loaded in
+			glBegin(GL_QUADS);
+			glTexCoord2f(0, 0);			
+			glVertex3f(-PLANESIZE / 2.0f, -0.0003f, PLANESIZE / 2.0f);
+			glTexCoord2f(TEXSCALE, 0);  
+			glVertex3f(PLANESIZE / 2.0f, -0.0003f, PLANESIZE / 2.0f);
+			glTexCoord2f(TEXSCALE, TEXSCALE); 
+			glVertex3f(PLANESIZE / 2.0f, -0.0003f, -PLANESIZE / 2.0f);
+			glTexCoord2f(0, TEXSCALE);  
+			glVertex3f(-PLANESIZE / 2.0f, -0.0003f, -PLANESIZE / 2.0f);
+
+			glEnd();
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glDisable(GL_TEXTURE_2D);
+
+			// Loop through the remainder of the Scene and render all models with given materials
+			for (int i = 1; i < AirPort.ModelList.size(); i++)
 			{
 				glPushMatrix();
-					SetMaterialWhite();
-					if( i==6 )
-					{
-						SetMaterialNoDiffuse();
-					}
+				if (AirPort.ModelList[i].GetMaterial() == 1) // Default material
+				{
+					SetMaterialDefault();
+				}
+				else if (AirPort.ModelList[i].GetMaterial() == 2) // No diffuse material
+				{
+					SetMaterialNoDiffuse();
+				}
 					AirPort.ModelList[i].DrawModel(true,true);
 				glPopMatrix();
 			}
